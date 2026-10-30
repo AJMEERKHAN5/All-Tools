@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AJMER KHAN HACKER KING — Video Compressor</title>
+<style>
+:root{--bg:#04060f;--c1:#00f0ff;--c2:#a855f7;--c3:#ff2e93;--tx:#e6ecff;--mut:#7f8bb3;--glass:rgba(14,20,44,.62)}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{min-height:100%}
+body{background:radial-gradient(ellipse at 50% 0%,#101a3c 0%,var(--bg) 65%);color:var(--tx);font-family:"Segoe UI",system-ui,Arial,sans-serif;overflow-x:hidden}
+#bg{position:fixed;inset:0;z-index:0;width:100%;height:100%}
+.grid{position:fixed;left:-50%;right:-50%;bottom:-10%;height:60%;z-index:0;pointer-events:none;
+ background:linear-gradient(var(--c1) 1px,transparent 1px) 0 0/60px 60px,linear-gradient(90deg,var(--c1) 1px,transparent 1px) 0 0/60px 60px;
+ opacity:.12;transform:perspective(500px) rotateX(70deg);animation:gridmove 3s linear infinite}
+@keyframes gridmove{to{background-position:0 60px,60px 0}}
+.wrap{position:relative;z-index:1;max-width:1050px;margin:0 auto;padding:30px 18px 60px;perspective:1400px}
+header{text-align:center;padding:10px 0 20px}
+.scene{width:110px;height:110px;margin:0 auto 26px;perspective:600px}
+.cube{width:100%;height:100%;position:relative;transform-style:preserve-3d;animation:spin 14s linear infinite}
+.cube div{position:absolute;width:110px;height:110px;display:flex;align-items:center;justify-content:center;font-size:40px;
+ border:2px solid var(--c1);background:rgba(0,240,255,.08);box-shadow:0 0 25px rgba(0,240,255,.5) inset,0 0 20px rgba(0,240,255,.35);color:var(--c1)}
+.cube .f{transform:translateZ(55px)}.cube .b{transform:rotateY(180deg) translateZ(55px)}
+.cube .r{transform:rotateY(90deg) translateZ(55px)}.cube .l{transform:rotateY(-90deg) translateZ(55px)}
+.cube .t{transform:rotateX(90deg) translateZ(55px)}.cube .u{transform:rotateX(-90deg) translateZ(55px)}
+.ring{position:absolute;inset:-28px;border:2px dashed var(--c2);border-radius:50%;transform:rotateX(75deg);animation:ringspin 6s linear infinite;box-shadow:0 0 18px var(--c2)}
+.ring.two{inset:-48px;border-color:var(--c3);animation-duration:9s;animation-direction:reverse;box-shadow:0 0 18px var(--c3)}
+@keyframes spin{from{transform:rotateX(-20deg) rotateY(0)}to{transform:rotateX(340deg) rotateY(360deg)}}
+@keyframes ringspin{from{transform:rotateX(75deg) rotateZ(0)}to{transform:rotateX(75deg) rotateZ(360deg)}}
+h1{font-size:clamp(28px,6vw,58px);font-weight:900;letter-spacing:3px;text-transform:uppercase;
+ background:linear-gradient(90deg,var(--c1),var(--c2),var(--c3),var(--c1));background-size:300% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;
+ animation:flow 5s linear infinite;filter:drop-shadow(0 6px 0 rgba(0,0,0,.6)) drop-shadow(0 0 22px rgba(168,85,247,.55))}
+@keyframes flow{to{background-position:300% 0}}
+.sub{color:var(--mut);margin-top:8px;letter-spacing:4px;font-size:13px;text-transform:uppercase}
+.badge{display:inline-block;margin-top:14px;padding:6px 14px;border:1px solid var(--c1);border-radius:30px;font-size:12px;color:var(--c1);animation:pulse 2s infinite}
+@keyframes pulse{50%{box-shadow:0 0 18px var(--c1)}}
+.card{background:var(--glass);backdrop-filter:blur(14px);border:1px solid rgba(120,150,255,.22);border-radius:20px;padding:24px;margin-top:22px;
+ transform-style:preserve-3d;transition:transform .15s ease-out,box-shadow .3s;box-shadow:0 25px 60px rgba(0,0,0,.55),0 0 0 1px rgba(0,240,255,.05) inset;position:relative;animation:rise .9s both}
+.card:hover{box-shadow:0 35px 80px rgba(0,0,0,.65),0 0 35px rgba(0,240,255,.2)}
+.card:nth-of-type(2){animation-delay:.12s}.card:nth-of-type(3){animation-delay:.24s}.card:nth-of-type(4){animation-delay:.36s}
+@keyframes rise{from{opacity:0;transform:translateZ(-300px) rotateX(35deg) translateY(60px)}}
+.card h2{font-size:14px;letter-spacing:3px;text-transform:uppercase;color:var(--c1);margin-bottom:16px;transform:translateZ(30px)}
+.drop{border:2px dashed rgba(0,240,255,.5);border-radius:16px;padding:40px 16px;text-align:center;cursor:pointer;transition:.25s;transform:translateZ(25px)}
+.drop:hover,.drop.on{background:rgba(0,240,255,.08);border-color:var(--c2);transform:translateZ(45px) scale(1.01)}
+.drop .ic{font-size:52px;display:block;animation:float 3s ease-in-out infinite}
+@keyframes float{50%{transform:translateY(-12px) rotateY(180deg)}}
+.drop p{color:var(--mut);margin-top:8px}.drop b{color:var(--tx)}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-top:16px}
+.stat{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:12px;transform:translateZ(20px)}
+.stat small{color:var(--mut);font-size:11px;letter-spacing:2px;text-transform:uppercase}.stat div{font-size:19px;font-weight:700;margin-top:4px;word-break:break-all}
+.preview{width:100%;max-height:260px;border-radius:12px;margin-top:16px;background:#000;display:none}
+.presets{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:12px;transform:translateZ(25px)}
+.pre{padding:14px 8px;text-align:center;border-radius:12px;cursor:pointer;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);transition:.2s;user-select:none}
+.pre:hover{transform:translateY(-5px) translateZ(20px);border-color:var(--c1)}
+.pre.sel{background:linear-gradient(135deg,rgba(0,240,255,.25),rgba(168,85,247,.3));border-color:var(--c1);box-shadow:0 0 22px rgba(0,240,255,.4)}
+.pre b{display:block;font-size:16px}.pre span{font-size:11px;color:var(--mut)}
+.row{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-top:16px;transform:translateZ(20px)}
+label{font-size:11px;color:var(--mut);letter-spacing:2px;text-transform:uppercase;display:block;margin-bottom:6px}
+input[type=number],select{width:100%;padding:11px 12px;border-radius:10px;border:1px solid rgba(255,255,255,.15);background:rgba(0,0,0,.4);color:var(--tx);font-size:15px;outline:none}
+input:focus,select:focus{border-color:var(--c1);box-shadow:0 0 12px rgba(0,240,255,.4)}
+select option{background:#0b1230}
+.hint{font-size:12px;color:var(--mut);margin-top:10px}
+.btn{display:block;width:100%;margin-top:6px;padding:18px;font-size:18px;font-weight:800;letter-spacing:4px;text-transform:uppercase;color:#02040c;border:none;border-radius:14px;cursor:pointer;
+ background:linear-gradient(90deg,var(--c1),var(--c2),var(--c3));background-size:200% 100%;animation:flow 4s linear infinite;
+ box-shadow:0 8px 0 #4b1b7a,0 18px 40px rgba(168,85,247,.5);transition:.15s;transform:translateZ(40px)}
+.btn:hover{transform:translateZ(40px) translateY(-3px)}.btn:active{transform:translateZ(40px) translateY(6px);box-shadow:0 2px 0 #4b1b7a,0 8px 20px rgba(168,85,247,.5)}
+.btn:disabled{filter:grayscale(.9) brightness(.6);cursor:not-allowed;animation:none}
+.prog{display:none;align-items:center;gap:22px;flex-wrap:wrap;justify-content:center}
+.ringp{position:relative;width:150px;height:150px;transform:translateZ(40px);animation:tilt 4s ease-in-out infinite}
+@keyframes tilt{50%{transform:translateZ(40px) rotateY(25deg) rotateX(-12deg)}}
+.ringp svg{width:100%;height:100%;transform:rotate(-90deg);filter:drop-shadow(0 0 10px var(--c1))}
+.ringp .pct{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:30px;font-weight:900}
+.bar{flex:1;min-width:220px}
+.track{height:18px;border-radius:12px;background:rgba(255,255,255,.08);overflow:hidden;box-shadow:inset 0 3px 6px rgba(0,0,0,.6)}
+.fill{height:100%;width:0%;border-radius:12px;background:linear-gradient(90deg,var(--c1),var(--c2),var(--c3));background-size:200% 100%;animation:flow 2s linear infinite;box-shadow:0 0 18px var(--c1);transition:width .25s}
+#status{margin-top:10px;color:var(--mut);font-size:14px}
+#log{margin-top:14px;height:90px;overflow:auto;font:11px/1.5 Consolas,monospace;color:#6ee7b7;background:rgba(0,0,0,.45);border-radius:10px;padding:8px;display:none}
+.result{display:none;text-align:center}
+.cmp{display:flex;justify-content:center;gap:30px;flex-wrap:wrap;margin:10px 0 18px}
+.cmp div{font-size:13px;color:var(--mut)}.cmp b{display:block;font-size:26px;color:var(--tx)}
+.save{color:#34d399!important}
+.dl{display:inline-block;padding:16px 38px;border-radius:14px;font-weight:800;letter-spacing:3px;text-decoration:none;text-transform:uppercase;color:#02040c;
+ background:linear-gradient(90deg,#34d399,var(--c1));box-shadow:0 8px 0 #0b6b55,0 16px 40px rgba(52,211,153,.4);transition:.15s}
+.dl:hover{transform:translateY(-3px) scale(1.04)}.dl:active{transform:translateY(5px);box-shadow:0 2px 0 #0b6b55}
+.outv{width:100%;max-height:300px;border-radius:12px;margin-top:18px;background:#000}
+.err{color:#ff6b8b}
+.tabs{display:inline-flex;gap:8px;margin-top:18px;padding:6px;border-radius:40px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12)}
+.tab{padding:10px 26px;border-radius:30px;cursor:pointer;font-weight:700;letter-spacing:2px;font-size:13px;text-transform:uppercase;color:var(--mut);transition:.25s;user-select:none}
+.tab:hover{transform:translateY(-3px) translateZ(20px);color:var(--tx)}
+.tab.on{color:#02040c;background:linear-gradient(90deg,var(--c1),var(--c2));box-shadow:0 0 22px rgba(0,240,255,.55)}
+input[type=range]{width:100%;accent-color:#00f0ff}
+.outi{width:100%;max-height:340px;object-fit:contain;border-radius:12px;margin-top:18px;background:#000;display:none}
+.hide{display:none!important}
+footer{text-align:center;color:var(--mut);font-size:12px;margin-top:34px;letter-spacing:2px}
+
+/* Visible offline tools panel */
+#extraTools .toolgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+#extraTools .toolbox{background:rgba(3,8,25,.72);border:1px solid rgba(0,240,255,.25);border-radius:16px;padding:18px;min-width:0;box-shadow:0 8px 28px rgba(0,0,0,.25)}
+#extraTools .toolbox h3{color:var(--c1);font-size:15px;letter-spacing:1px;margin-bottom:12px}
+#extraTools textarea,#extraTools input[type=text],#extraTools input[type=number],#extraTools select{width:100%;background:rgba(0,0,0,.45);color:var(--tx);border:1px solid rgba(255,255,255,.18);border-radius:9px;padding:10px;margin:5px 0 10px;font:inherit}
+#extraTools textarea{min-height:95px;resize:vertical}
+#extraTools .toolbtn{border:1px solid rgba(0,240,255,.45);border-radius:9px;padding:10px 12px;margin:4px 3px 4px 0;background:linear-gradient(135deg,rgba(0,240,255,.16),rgba(168,85,247,.2));color:var(--tx);font-weight:700;cursor:pointer}
+#extraTools .toolbtn:hover{border-color:var(--c1);box-shadow:0 0 12px rgba(0,240,255,.18)}
+#extraTools .toolstatus{font-size:12px;color:#6ee7b7;min-height:18px;overflow-wrap:anywhere}
+#extraTools .sectionnote{color:var(--mut);font-size:13px;line-height:1.5;margin:-5px 0 16px}
+
+</style>
+</head>
+<body>
+<canvas id="bg"></canvas><div class="grid"></div>
+<div class="wrap">
+ <header>
+  <div class="scene"><div class="cube">
+   <div class="f">▶</div><div class="b">⚡</div><div class="r">◉</div><div class="l">▣</div><div class="t">✦</div><div class="u">⬢</div>
+   <span class="ring"></span><span class="ring two"></span></div></div>
+  <h1>Ajmer Khan Hacker King</h1>
+  <p class="sub">Ultimate Video Compressor</p>
+  <span class="badge">● 100% PRIVATE — RUNS INSIDE YOUR BROWSER</span><br><div class="tabs"><div class="tab on" data-m="video">🎬 Video</div><div class="tab" data-m="image">🖼️ Photo</div></div>
+ </header>
+
+ <section class="card tilt">
+  <h2>01 · Upload Video</h2>
+  <div class="drop" id="drop"><span class="ic" id="dropIc">🎬</span><p><b>Click to select</b> or drag &amp; drop any <span id="kind">video</span> file</p><p style="font-size:12px" id="fmts">MP4, MOV, MKV, AVI, WEBM, 3GP and more</p></div>
+  <input type="file" id="file" accept="video/*,image/*,.mkv,.avi,.mov,.flv,.wmv,.3gp,.ts" hidden>
+  <video id="prev" class="preview" controls muted></video><img id="pimg" class="preview" style="object-fit:contain" alt="preview">
+  <div class="stats" id="info" style="display:none">
+   <div class="stat"><small>File</small><div id="iName">-</div></div>
+   <div class="stat"><small>Size</small><div id="iSize">-</div></div>
+   <div class="stat"><small>Resolution</small><div id="iRes">-</div></div>
+   <div class="stat"><small id="lDur">Duration</small><div id="iDur">-</div></div>
+  </div>
+ </section>
+
+ <section class="card tilt">
+  <h2>02 · Size &amp; Resolution Controls</h2>
+  <div id="vctl">
+  <div class="presets" id="presets">
+   <div class="pre sel" data-h="0"><b>Original</b><span>Keep resolution</span></div>
+   <div class="pre" data-h="1080"><b>1080p</b><span>Full HD</span></div>
+   <div class="pre" data-h="720"><b>720p</b><span>HD · Balanced</span></div>
+   <div class="pre" data-h="480"><b>480p</b><span>SD · Small</span></div>
+   <div class="pre" data-h="360"><b>360p</b><span>Tiny</span></div>
+   <div class="pre" data-h="240"><b>240p</b><span>Ultra tiny</span></div>
+  </div>
+  <div class="row">
+   <div><label>Custom Width (px)</label><input type="number" id="cw" min="64" placeholder="auto"></div>
+   <div><label>Custom Height (px)</label><input type="number" id="ch" min="64" placeholder="auto"></div>
+   <div><label>Target Size (MB)</label><input type="number" id="tsz" min="0.1" step="0.1" placeholder="optional"></div>
+   <div><label>Quality / Speed</label>
+    <select id="q"><option value="30">Smallest file (CRF 30)</option><option value="28" selected>Balanced (CRF 28)</option><option value="24">High quality (CRF 24)</option><option value="20">Max quality (CRF 20)</option></select></div>
+  </div>
+  <p class="hint">Typing a custom width/height overrides the preset. Enter just one value to keep the aspect ratio. A Target Size (MB) overrides the quality setting and aims for that file size.</p>
+  </div>
+  <div id="ictl" class="hide">
+   <div class="presets" id="ipresets">
+    <div class="pre sel" data-w="0"><b>Original</b><span>Keep dimensions</span></div>
+    <div class="pre" data-w="3840"><b>4K</b><span>3840 px wide</span></div>
+    <div class="pre" data-w="1920"><b>Full HD</b><span>1920 px wide</span></div>
+    <div class="pre" data-w="1280"><b>HD</b><span>1280 px wide</span></div>
+    <div class="pre" data-w="800"><b>Medium</b><span>800 px wide</span></div>
+    <div class="pre" data-w="480"><b>Small</b><span>480 px wide</span></div>
+   </div>
+   <div class="row">
+    <div><label>Custom Width (px)</label><input type="number" id="iw" min="16" placeholder="auto"></div>
+    <div><label>Custom Height (px)</label><input type="number" id="ih" min="16" placeholder="auto"></div>
+    <div><label>Target Size (KB)</label><input type="number" id="itsz" min="5" step="5" placeholder="optional"></div>
+    <div><label>Output Format</label><select id="ifmt"><option value="image/jpeg" selected>JPEG (smallest, compatible)</option><option value="image/webp">WebP (very small)</option><option value="image/png">PNG (lossless)</option></select></div>
+   </div>
+   <div class="row"><div style="grid-column:1/-1"><label>Quality: <b id="iqv">75</b>%</label><input type="range" id="iq" min="10" max="100" value="75"></div></div>
+   <p class="hint">Enter only one of width/height to keep the aspect ratio. A Target Size (KB) overrides the quality slider. PNG ignores quality (use JPEG/WebP for smaller files).</p>
+  </div>
+ </section>
+
+ <section class="card tilt">
+  <h2>03 · Compress</h2>
+  <button class="btn" id="go" disabled>Compress Video</button>
+  <div class="prog" id="prog" style="margin-top:22px">
+   <div class="ringp"><svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="52" stroke="rgba(255,255,255,.1)" stroke-width="10" fill="none"/>
+    <circle id="arc" cx="60" cy="60" r="52" stroke="url(#g)" stroke-width="10" fill="none" stroke-linecap="round" stroke-dasharray="327" stroke-dashoffset="327"/>
+    <defs><linearGradient id="g"><stop offset="0" stop-color="#00f0ff"/><stop offset="1" stop-color="#ff2e93"/></linearGradient></defs></svg><div class="pct" id="pct">0%</div></div>
+   <div class="bar"><div class="track"><div class="fill" id="fill"></div></div><div id="status">Waiting...</div></div>
+  </div>
+  <div id="log"></div>
+ </section>
+
+ <section class="card tilt result" id="res">
+  <h2>04 · Done</h2>
+  <div class="cmp"><div>Original<b id="rA">-</b></div><div>Compressed<b id="rB">-</b></div><div>Saved<b class="save" id="rC">-</b></div></div>
+  <a class="dl" id="dl" download>⬇ Download Video</a>
+  <video class="outv" id="outv" controls></video><img class="outi" id="outi" alt="compressed photo">
+ </section>
+
+ <section class="card" id="extraTools">
+  <h2>05 · OFFLINE TOOLBOX — NO API REQUIRED</h2>
+  <p class="sectionnote">یہ اضافی ٹولز نیچے واضح طور پر موجود ہیں۔ ٹیکسٹ والے ٹولز براؤزر میں چلتے ہیں؛ آواز کی سہولت آپ کے براؤزر پر منحصر ہے۔</p>
+  <div class="toolgrid">
+   <div class="toolbox">
+    <h3>📝 Text Repeater</h3>
+    <label>Text / Word</label><textarea id="repeatText" placeholder="Type a word or sentence..."></textarea>
+    <label>Repeat Count (maximum 1,000,000)</label><input id="repeatCount" type="number" min="1" max="1000000" value="100">
+    <label>Separator</label><select id="repeatSep"><option value="\n">New line</option><option value=" ">Space</option><option value=", ">Comma</option><option value="">None</option></select>
+    <button class="toolbtn" id="repeatBtn">Generate</button><button class="toolbtn" id="copyRepeat">Copy</button><button class="toolbtn" id="downloadRepeat">Download TXT</button><button class="toolbtn" id="shareRepeat">Share</button>
+    <label>Generated Output</label><textarea id="repeatOutput" placeholder="Your repeated text appears here..."></textarea><div class="toolstatus" id="repeatStatus"></div>
+   </div>
+   <div class="toolbox">
+    <h3>🔊 Text-to-Speech</h3><label>Text to read aloud</label><textarea id="ttsText" placeholder="Write or paste text to hear it..."></textarea>
+    <label>Voice</label><select id="ttsVoice"><option value="">Default device voice</option></select>
+    <div class="row"><div><label>Speed</label><select id="ttsRate"><option value="0.7">Slow</option><option value="1" selected>Normal</option><option value="1.25">Fast</option><option value="1.5">Very fast</option></select></div><div><label>Pitch</label><select id="ttsPitch"><option value="0.8">Low</option><option value="1" selected>Normal</option><option value="1.2">High</option></select></div></div>
+    <button class="toolbtn" id="speakBtn">▶ Speak</button><button class="toolbtn" id="pauseBtn">Pause / Resume</button><button class="toolbtn" id="stopBtn">Stop</button><button class="toolbtn" id="copyTts">Copy Text</button>
+    <p class="sectionnote">Note: this uses the speech engine provided by your browser/device. Audio-file download is not supported by the standard speech engine.</p>
+   </div>
+   <div class="toolbox">
+    <h3>🔠 Text Toolkit</h3><label>Enter text or JSON</label><textarea id="utilText" placeholder="Paste text or JSON here..."></textarea>
+    <button class="toolbtn utilAction" data-action="upper">UPPERCASE</button><button class="toolbtn utilAction" data-action="lower">lowercase</button><button class="toolbtn utilAction" data-action="title">Title Case</button><button class="toolbtn utilAction" data-action="trim">Clean Spaces</button><button class="toolbtn utilAction" data-action="reverse">Reverse</button><button class="toolbtn utilAction" data-action="count">Count Words</button><button class="toolbtn utilAction" data-action="base64e">Base64 Encode</button><button class="toolbtn utilAction" data-action="base64d">Base64 Decode</button><button class="toolbtn utilAction" data-action="urle">URL Encode</button><button class="toolbtn utilAction" data-action="urld">URL Decode</button><button class="toolbtn utilAction" data-action="json">Format JSON</button><button class="toolbtn utilAction" data-action="copy">Copy</button><button class="toolbtn utilAction" data-action="download">Download TXT</button>
+    <div class="toolstatus" id="utilStatus" aria-live="polite">Ready.</div>
+   </div>
+   <div class="toolbox">
+    <h3>🔐 Password Generator</h3><label>Password Length (8–128)</label><input id="pwLength" type="number" min="8" max="128" value="20"><label>Character Set</label><select id="pwSet"><option value="all">Letters + Numbers + Symbols</option><option value="alnum">Letters + Numbers</option><option value="letters">Letters only</option><option value="numbers">Numbers only</option></select>
+    <button class="toolbtn" id="pwGenerate">Generate Secure Password</button><button class="toolbtn" id="pwCopy">Copy Password</button><label>Generated Password</label><textarea id="pwOutput" readonly placeholder="Your password appears here..."></textarea><div class="toolstatus">Generated locally using your browser's secure random generator.</div>
+   </div>
+  </div>
+ </section>
+
+ <footer>© AJMER KHAN HACKER KING · POWERED BY FFMPEG.WASM</footer>
+</div>
+
+<script>
+/* ---------- 3D starfield / tunnel background ---------- */
+(function(){
+ const c=document.getElementById('bg'),x=c.getContext('2d');let W,H,mx=0,my=0;
+ const N=420,S=[];function rs(s){s.x=(Math.random()-.5)*2400;s.y=(Math.random()-.5)*2400;s.z=Math.random()*1600+50;s.h=Math.random()<.5?185:Math.random()<.5?280:330}
+ for(let i=0;i<N;i++){const s={};rs(s);S.push(s)}
+ function rz(){W=c.width=innerWidth;H=c.height=innerHeight}rz();addEventListener('resize',rz);
+ addEventListener('mousemove',e=>{mx=(e.clientX/W-.5)*2;my=(e.clientY/H-.5)*2});
+ (function loop(){x.fillStyle='rgba(4,6,15,.32)';x.fillRect(0,0,W,H);
+  for(const s of S){s.z-=6;if(s.z<=1)rs(s),s.z=1600;
+   const k=500/s.z,px=W/2+(s.x-mx*160)*k,py=H/2+(s.y-my*160)*k,r=Math.max(.3,(1-s.z/1600)*3);
+   const k2=500/(s.z+40),qx=W/2+(s.x-mx*160)*k2,qy=H/2+(s.y-my*160)*k2;
+   x.strokeStyle=`hsla(${s.h},100%,65%,${1-s.z/1600})`;x.lineWidth=r;x.beginPath();x.moveTo(qx,qy);x.lineTo(px,py);x.stroke()}
+  requestAnimationFrame(loop)})();
+})();
+
+/* ---------- 3D tilt on cards ---------- */
+document.querySelectorAll('.tilt').forEach(el=>{
+ el.addEventListener('mousemove',e=>{const r=el.getBoundingClientRect(),dx=(e.clientX-r.left)/r.width-.5,dy=(e.clientY-r.top)/r.height-.5;
+  el.style.transform=`rotateY(${dx*7}deg) rotateX(${-dy*7}deg)`});
+ el.addEventListener('mouseleave',()=>el.style.transform='');
+});
+
+/* ---------- App ---------- */
+const $=id=>document.getElementById(id);
+let mode='video',file=null,meta={w:0,h:0,d:0},ff=null,loaded=false,preH=0,preW=0,outURL=null,imgEl=null;
+const fmt=b=>b>=1073741824?(b/1073741824).toFixed(2)+' GB':b>=1048576?(b/1048576).toFixed(2)+' MB':(b/1024).toFixed(1)+' KB';
+const ft=s=>{s=Math.round(s);const h=Math.floor(s/3600),m=Math.floor(s%3600/60),c=s%60;return(h?h+':':'')+String(m).padStart(h?2:1,'0')+':'+String(c).padStart(2,'0')};
+const log=t=>{const l=$('log');l.style.display='block';l.textContent+=t+'\n';l.scrollTop=l.scrollHeight};
+const setP=p=>{p=Math.max(0,Math.min(100,p));$('pct').textContent=Math.floor(p)+'%';$('fill').style.width=p+'%';$('arc').style.strokeDashoffset=327*(1-p/100)};
+const btnLabel=()=>mode==='video'?'Compress Video':'Compress Photo';
+
+/* ----- mode switch (Video / Photo) ----- */
+function setMode(m){
+ mode=m;file=null;
+ document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('on',t.dataset.m===m));
+ $('vctl').classList.toggle('hide',m!=='video');$('ictl').classList.toggle('hide',m!=='image');
+ $('kind').textContent=m==='video'?'video':'photo';
+ $('fmts').textContent=m==='video'?'MP4, MOV, MKV, AVI, WEBM, 3GP and more':'JPG, PNG, WEBP, BMP, GIF, AVIF and more';
+ $('dropIc').textContent=m==='video'?'🎬':'🖼️';
+ const v=$('prev');try{v.pause()}catch(e){}v.removeAttribute('src');v.style.display='none';$('pimg').style.display='none';
+ $('info').style.display='none';$('go').disabled=true;$('go').textContent=btnLabel();
+ $('res').style.display='none';$('prog').style.display='none';$('log').style.display='none';$('log').textContent='';
+ $('file').value='';
+}
+document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>{if(t.dataset.m!==mode)setMode(t.dataset.m)});
+
+$('drop').onclick=()=>$('file').click();
+['dragover','dragenter'].forEach(e=>$('drop').addEventListener(e,ev=>{ev.preventDefault();$('drop').classList.add('on')}));
+['dragleave','drop'].forEach(e=>$('drop').addEventListener(e,ev=>{ev.preventDefault();$('drop').classList.remove('on')}));
+$('drop').addEventListener('drop',ev=>{if(ev.dataTransfer.files[0])pick(ev.dataTransfer.files[0])});
+$('file').onchange=e=>{if(e.target.files[0])pick(e.target.files[0])};
+
+function pick(f){
+ const isImg=f.type.startsWith('image/')||/\.(jpe?g|png|webp|gif|bmp|avif|heic|heif|tiff?)$/i.test(f.name);
+ const want=isImg?'image':'video';
+ if(want!==mode)setMode(want);
+ file=f;$('res').style.display='none';
+ const u=URL.createObjectURL(f);
+ $('iName').textContent=f.name.length>26?f.name.slice(0,23)+'…':f.name;$('iSize').textContent=fmt(f.size);
+ $('lDur').textContent=isImg?'Type':'Duration';
+ if(isImg){
+  const im=new Image();
+  im.onload=()=>{imgEl=im;$('iRes').textContent=im.naturalWidth+' × '+im.naturalHeight;$('iDur').textContent=(f.type||'image').replace('image/','').toUpperCase();
+   $('pimg').src=u;$('pimg').style.display='block'};
+  im.onerror=()=>{imgEl=null;$('iRes').textContent='Unsupported';$('iDur').textContent='?';$('go').disabled=true;alert('This image format cannot be read by your browser (e.g. HEIC). Please convert it to JPG/PNG first.')};
+  im.src=u;
+ }else{
+  const v=$('prev');v.src=u;v.style.display='block';
+  v.onloadedmetadata=()=>{meta={w:v.videoWidth,h:v.videoHeight,d:v.duration};$('iRes').textContent=meta.w+' × '+meta.h;$('iDur').textContent=ft(meta.d)};
+  v.onerror=()=>{$('iRes').textContent='Preview unsupported';$('iDur').textContent='?'};
+ }
+ $('info').style.display='grid';$('go').disabled=false;
+}
+
+/* ----- video presets ----- */
+document.querySelectorAll('#presets .pre').forEach(p=>p.onclick=()=>{
+ document.querySelectorAll('#presets .pre').forEach(x=>x.classList.remove('sel'));p.classList.add('sel');preH=+p.dataset.h;$('cw').value='';$('ch').value=''});
+['cw','ch'].forEach(i=>$(i).oninput=()=>{if($('cw').value||$('ch').value)document.querySelectorAll('#presets .pre').forEach(x=>x.classList.remove('sel'))});
+/* ----- photo presets ----- */
+document.querySelectorAll('#ipresets .pre').forEach(p=>p.onclick=()=>{
+ document.querySelectorAll('#ipresets .pre').forEach(x=>x.classList.remove('sel'));p.classList.add('sel');preW=+p.dataset.w;$('iw').value='';$('ih').value=''});
+['iw','ih'].forEach(i=>$(i).oninput=()=>{if($('iw').value||$('ih').value)document.querySelectorAll('#ipresets .pre').forEach(x=>x.classList.remove('sel'))});
+$('iq').oninput=()=>$('iqv').textContent=$('iq').value;
+$('ifmt').onchange=()=>{$('iq').disabled=$('ifmt').value==='image/png'};
+
+/* ----- FFmpeg engine loader (local files first, then several CDNs) ----- */
+const blobCache={};
+async function blobURL(url,type){
+ if(blobCache[url])return blobCache[url];
+ const r=await fetch(url);if(!r.ok)throw new Error('HTTP '+r.status+' for '+url);
+ return blobCache[url]=URL.createObjectURL(new Blob([await r.arrayBuffer()],{type}));
+}
+function loadScript(u){return new Promise((ok,no)=>{const s=document.createElement('script');s.src=u;s.onload=ok;s.onerror=()=>no(new Error('cannot load '+u));document.head.appendChild(s)})}
+const LIBS=['./ffmpeg/','https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.12.10/dist/umd/','https://unpkg.com/@ffmpeg/ffmpeg@0.12.10/dist/umd/'];
+let libBase=null;
+async function loadLib(){
+ if(typeof FFmpegWASM!=='undefined')return;
+ for(const b of LIBS){
+  try{await loadScript(b+'ffmpeg.js');if(typeof FFmpegWASM!=='undefined'){libBase=b;log('Library loaded from '+b);return}}
+  catch(e){log(e.message)}
+ }
+ throw new Error('ffmpeg library could not be loaded from any source');
+}
+function makeFF(){
+ const {FFmpeg}=FFmpegWASM;const f=new FFmpeg();
+ f.on('log',({message})=>log(message));
+ f.on('progress',({progress})=>{if(isFinite(progress))setP(progress*100);$('status').textContent='Compressing… '+Math.floor(Math.max(0,Math.min(1,progress))*100)+'%'});
+ return f;
+}
+async function loadFF(){
+ if(loaded)return;
+ await loadLib();
+ const local=libBase==='./ffmpeg/';
+ const tries=[];
+ if(local)tries.push({n:'local files',core:new URL('./ffmpeg/ffmpeg-core.js',location.href).href,wasm:new URL('./ffmpeg/ffmpeg-core.wasm',location.href).href,worker:null});
+ for(const ver of ['0.12.6','0.12.10'])for(const host of ['https://cdn.jsdelivr.net/npm','https://unpkg.com'])for(const kind of ['umd','esm']){
+  const base=host+'/@ffmpeg/core@'+ver+'/dist/'+kind+'/';
+  tries.push({n:host.split('//')[1].split('/')[0]+' core '+ver+' ('+kind+')',core:base+'ffmpeg-core.js',wasm:base+'ffmpeg-core.wasm',blob:true});
+ }
+ let last;
+ for(const t of tries){
+  try{
+   $('status').textContent='Loading compression engine ('+t.n+')… first time only';log('Trying: '+t.n);
+   ff=makeFF();const opt={};
+   if(t.blob){
+    opt.coreURL=await blobURL(t.core,'text/javascript');opt.wasmURL=await blobURL(t.wasm,'application/wasm');
+    if(!local)opt.classWorkerURL=await blobURL(libBase+'814.ffmpeg.js','text/javascript');
+   }else{opt.coreURL=t.core;opt.wasmURL=t.wasm}
+   await ff.load(opt);loaded=true;log('Engine ready ✔');return;
+  }catch(e){last=e;log('Failed ('+t.n+'): '+(e.message||e));try{ff.terminate()}catch(x){}}
+ }
+ throw new Error('Engine could not start. Host the ffmpeg files in a /ffmpeg/ folder next to this page (see instructions). Last error: '+(last&&last.message||last));
+}
+
+function buildScale(){
+ const cw=parseInt($('cw').value),ch=parseInt($('ch').value),ev=n=>Math.max(2,Math.round(n/2)*2);
+ if(cw||ch){return `scale=${cw?ev(cw):-2}:${ch?ev(ch):-2}`}
+ if(preH&&(!meta.h||meta.h>preH))return `scale=-2:${preH}`;
+ return 'scale=trunc(iw/2)*2:trunc(ih/2)*2';
+}
+
+/* ----- photo compression (Canvas, instant, no engine needed) ----- */
+const tick=()=>new Promise(r=>setTimeout(r,20));
+const toBlob=(c,t,q)=>new Promise(r=>c.toBlob(r,t,q));
+async function compressImage(){
+ const im=imgEl;if(!im)throw new Error('Image not ready');
+ let w=im.naturalWidth,h=im.naturalHeight;
+ const cw=parseInt($('iw').value),ch=parseInt($('ih').value);
+ if(cw||ch){if(cw&&ch){w=cw;h=ch}else if(cw){h=Math.round(h*cw/w);w=cw}else{w=Math.round(w*ch/h);h=ch}}
+ else if(preW&&w>preW){h=Math.round(h*preW/w);w=preW}
+ w=Math.max(1,w);h=Math.max(1,h);
+ const type=$('ifmt').value,tgt=parseFloat($('itsz').value)*1024;
+ const draw=(W,H)=>{const c=document.createElement('canvas');c.width=W;c.height=H;const x=c.getContext('2d');
+  if(type==='image/jpeg'){x.fillStyle='#fff';x.fillRect(0,0,W,H)}x.imageSmoothingQuality='high';x.drawImage(im,0,0,W,H);return c};
+ setP(10);await tick();
+ let blob,c=draw(w,h);
+ if(tgt>0){
+  if(type==='image/png'){
+   let s=1;blob=await toBlob(c,type);
+   while(blob.size>tgt&&s>0.08){s*=0.85;c=draw(Math.max(1,Math.round(w*s)),Math.max(1,Math.round(h*s)));blob=await toBlob(c,type);setP(10+(1-s)*85);await tick()}
+  }else{
+   let lo=0.03,hi=0.95,best=null;
+   for(let i=0;i<9;i++){const q=(lo+hi)/2,b=await toBlob(c,type,q);if(b.size<=tgt){best=b;lo=q}else hi=q;setP(10+i*9);await tick()}
+   if(!best){let s=1;while(s>0.1){s*=0.8;const c2=draw(Math.max(1,Math.round(w*s)),Math.max(1,Math.round(h*s)));const b=await toBlob(c2,type,0.5);best=b;if(b.size<=tgt)break;setP(60+(1-s)*35);await tick()}}
+   blob=best;
+  }
+ }else blob=await toBlob(c,type,type==='image/png'?undefined:$('iq').value/100);
+ if(!blob)throw new Error('Your browser cannot encode this format. Try JPEG.');
+ return blob;
+}
+
+$('go').onclick=async()=>{
+ if(!file)return;
+ const btn=$('go');btn.disabled=true;btn.textContent='Processing…';$('res').style.display='none';
+ $('prog').style.display='flex';$('log').textContent='';setP(0);
+ let mounted=false;
+ try{
+  let blob,outName,isImg=mode==='image';
+  if(isImg){
+   $('status').textContent='Compressing photo…';
+   blob=await compressImage();
+   const ex={'image/jpeg':'jpg','image/webp':'webp','image/png':'png'}[blob.type]||'jpg';
+   outName=file.name.replace(/\.[^.]+$/,'')+'_compressed.'+ex;
+  }else{
+   await loadFF();
+   $('status').textContent='Preparing video…';
+   const ext=(file.name.match(/\.[a-z0-9]+$/i)||['.mp4'])[0].toLowerCase();
+   let inp='input'+ext;
+   try{await ff.createDir('/in');await ff.mount('WORKERFS',{files:[file]},'/in');mounted=true;inp='/in/'+file.name}
+   catch(e){log('Direct mount unavailable, copying file to memory…');await ff.writeFile(inp,new Uint8Array(await file.arrayBuffer()))}
+   const args=['-i',inp,'-vf',buildScale(),'-c:v','libx264','-preset','ultrafast','-pix_fmt','yuv420p'];
+   const tgt=parseFloat($('tsz').value);
+   if(tgt>0&&meta.d>0){
+    const ab=96,total=tgt*8192/meta.d,vb=Math.max(40,Math.floor(total-ab));
+    args.push('-b:v',vb+'k','-maxrate',Math.floor(vb*1.5)+'k','-bufsize',vb*2+'k');log('Target video bitrate: '+vb+' kbps');
+   }else args.push('-crf',$('q').value);
+   args.push('-c:a','aac','-b:a','96k','-movflags','+faststart','-y','out.mp4');
+   $('status').textContent='Compressing…';
+   const rc=await ff.exec(args);
+   if(rc!==0)throw new Error('FFmpeg could not process this file (code '+rc+'). See the log above.');
+   const data=await ff.readFile('out.mp4');
+   blob=new Blob([data.buffer],{type:'video/mp4'});
+   outName=file.name.replace(/\.[^.]+$/,'')+'_compressed.mp4';
+   try{await ff.deleteFile('out.mp4')}catch(e){}
+   if(!mounted){try{await ff.deleteFile(inp)}catch(e){}}
+  }
+  if(outURL)URL.revokeObjectURL(outURL);outURL=URL.createObjectURL(blob);
+  setP(100);$('status').textContent='Completed ✔';
+  $('rA').textContent=fmt(file.size);$('rB').textContent=fmt(blob.size);
+  const sv=(1-blob.size/file.size)*100;$('rC').textContent=(sv>=0?sv.toFixed(1)+'%':'+'+Math.abs(sv).toFixed(1)+'% larger');
+  $('dl').href=outURL;$('dl').download=outName;$('dl').textContent=isImg?'⬇ Download Photo':'⬇ Download Video';
+  $('outv').style.display=isImg?'none':'block';$('outi').style.display=isImg?'block':'none';
+  if(isImg)$('outi').src=outURL;else $('outv').src=outURL;
+  $('res').style.display='block';$('res').scrollIntoView({behavior:'smooth',block:'center'});
+ }catch(e){
+  $('status').innerHTML='<span class="err">Error: '+(e.message||e)+'</span>';log('ERROR: '+(e.message||e));
+  if(/memory|abort|OOM/i.test(String(e.message||e))){loaded=false}
+ }finally{
+  if(mounted){try{await ff.unmount('/in');await ff.deleteDir('/in')}catch(e){}}
+  btn.disabled=false;btn.textContent=btnLabel();
+ }
+};
+
+/* ---------- Additional visible offline tools ---------- */
+const safeDownload=(name,content,type='text/plain;charset=utf-8')=>{
+ const blob=new Blob([content],{type}),url=URL.createObjectURL(blob),a=document.createElement('a');
+ a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1500);
+};
+async function copyText(text){
+ if(navigator.clipboard&&window.isSecureContext){await navigator.clipboard.writeText(text);return}
+ const ta=document.createElement('textarea');ta.value=text;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();const ok=document.execCommand('copy');ta.remove();if(!ok)throw new Error('Copy is unavailable in this browser.');
+}
+$('repeatBtn').onclick=()=>{
+ const text=$('repeatText').value,count=Math.max(1,Math.min(1000000,parseInt($('repeatCount').value)||1)),sep=$('repeatSep').value;
+ if(!text){$('repeatStatus').textContent='Enter some text first.';return}
+ const estimated=text.length*count+sep.length*(count-1);
+ if(estimated>20000000){$('repeatStatus').textContent='Output is too large for safe browser memory. Reduce count or text length.';return}
+ $('repeatOutput').value=Array(count).fill(text).join(sep);$('repeatStatus').textContent='Generated '+count.toLocaleString()+' repetitions.';
+};
+$('copyRepeat').onclick=async()=>{try{await copyText($('repeatOutput').value);$('repeatStatus').textContent='Copied to clipboard.'}catch(e){$('repeatStatus').textContent=e.message}};
+$('downloadRepeat').onclick=()=>{if(!$('repeatOutput').value){$('repeatStatus').textContent='Generate output first.';return}safeDownload('repeated-text.txt',$('repeatOutput').value);$('repeatStatus').textContent='Download started.'};
+$('shareRepeat').onclick=async()=>{const text=$('repeatOutput').value;if(!text){$('repeatStatus').textContent='Generate output first.';return}try{if(navigator.share)await navigator.share({title:'Repeated Text',text});else{await copyText(text);$('repeatStatus').textContent='Sharing unavailable; text copied instead.'}}catch(e){if(e.name!=='AbortError')$('repeatStatus').textContent='Share failed: '+e.message}};
+function loadTTSVoices(){if(!('speechSynthesis'in window))return;const sel=$('ttsVoice'),old=sel.value,voices=speechSynthesis.getVoices();sel.innerHTML='<option value="">Default device voice</option>';voices.forEach((v,i)=>{const o=document.createElement('option');o.value=String(i);o.textContent=v.name+' ('+v.lang+')';sel.appendChild(o)});if(old&&[...sel.options].some(o=>o.value===old))sel.value=old}
+if('speechSynthesis'in window){loadTTSVoices();speechSynthesis.onvoiceschanged=loadTTSVoices}
+$('speakBtn').onclick=()=>{if(!('speechSynthesis'in window)){alert('Text-to-speech is not supported in this browser. Try Chrome.');return}const text=$('ttsText').value.trim();if(!text){alert('Enter text first.');return}speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);const voices=speechSynthesis.getVoices(),idx=parseInt($('ttsVoice').value);if(Number.isInteger(idx)&&voices[idx])u.voice=voices[idx];u.rate=parseFloat($('ttsRate').value)||1;u.pitch=parseFloat($('ttsPitch').value)||1;speechSynthesis.speak(u)};
+$('pauseBtn').onclick=()=>{if(!('speechSynthesis'in window))return;if(speechSynthesis.paused)speechSynthesis.resume();else speechSynthesis.pause()};
+$('stopBtn').onclick=()=>{if('speechSynthesis'in window)speechSynthesis.cancel()};
+$('copyTts').onclick=async()=>{try{await copyText($('ttsText').value);alert('Text copied.')}catch(e){alert(e.message)}};
+document.querySelectorAll('.utilAction').forEach(b=>b.onclick=async()=>{const el=$('utilText'),v=el.value,action=b.dataset.action;let out=v;try{switch(action){case'upper':out=v.toUpperCase();break;case'lower':out=v.toLowerCase();break;case'title':out=v.toLowerCase().replace(/\b\p{L}/gu,c=>c.toUpperCase());break;case'trim':out=v.split(/\s+/).filter(Boolean).join(' ');break;case'reverse':out=[...v].reverse().join('');break;case'count':$('utilStatus').textContent='Words: '+(v.trim()?v.trim().split(/\s+/).length:0)+' · Characters: '+v.length+' · No spaces: '+v.replace(/\s/g,'').length+' · Lines: '+(v?v.split(/\r\n|\r|\n/).length:0);return;case'base64e':out=btoa(unescape(encodeURIComponent(v)));break;case'base64d':out=decodeURIComponent(escape(atob(v)));break;case'urle':out=encodeURIComponent(v);break;case'urld':out=decodeURIComponent(v);break;case'json':out=JSON.stringify(JSON.parse(v),null,2);break;case'copy':await copyText(v);$('utilStatus').textContent='Copied.';return;case'download':safeDownload('text-result.txt',v);$('utilStatus').textContent='Download started.';return}el.value=out;$('utilStatus').textContent='Done.'}catch(e){$('utilStatus').textContent='Could not process: '+e.message}});
+$('pwGenerate').onclick=()=>{const n=Math.max(8,Math.min(128,parseInt($('pwLength').value)||20)),set=$('pwSet').value;let chars=set==='numbers'?'0123456789':set==='letters'?'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ':set==='alnum'?'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789':'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()-_=+[]{}:,.?';if(!window.crypto||!crypto.getRandomValues){alert('Secure random generator unavailable in this browser.');return}const bytes=new Uint32Array(n);crypto.getRandomValues(bytes);let out='';for(let i=0;i<n;i++)out+=chars[bytes[i]%chars.length];$('pwOutput').value=out};
+$('pwCopy').onclick=async()=>{try{await copyText($('pwOutput').value);alert('Password copied.')}catch(e){alert(e.message)}};
+
+</script>
+</body>
+</html>
